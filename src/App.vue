@@ -1,7 +1,19 @@
 <script setup lang="ts">
-import useMainCombiner from '@/classesCombiners/mainCombiner'
+import useMainCombiner from './composables/classesCombiners/mainCombiner'
+import useFakeData from '@/composables/fakeData'
+import { onMounted, ref } from 'vue'
 
 const { frostGlassStyle, listItemStyle } = useMainCombiner()
+
+const leftBLock = ref([])
+const rightBlock = ref([])
+const { isLoading, getFakeData } = useFakeData()
+
+onMounted(async () => {
+  const response = await getFakeData()
+  leftBLock.value = response.left
+  rightBlock.value = response.right
+})
 </script>
 
 <template>
@@ -10,77 +22,43 @@ const { frostGlassStyle, listItemStyle } = useMainCombiner()
       <div :class="frostGlassStyle" class="flex flex-col w-[600px]">
         <div class="mb-4 flex gap-2">
           <div
+            v-for="block in leftBlockData"
+            :key="block.id"
             :class="{
               [frostGlassStyle]: true,
               [listItemStyle]: true,
             }"
           >
-            a
-          </div>
-          <div
-            :class="{
-              [frostGlassStyle]: true,
-              [listItemStyle]: true,
-            }"
-          >
-            a
+            {{ block.name }}
           </div>
         </div>
         <div class="self-center">selected: n/m</div>
       </div>
       <div :class="frostGlassStyle" class="w-[600px] items-center justify-center flex">111</div>
     </div>
-    <div class="flex gap-4 flex-1">
-      <div :class="frostGlassStyle" class="flex-1 !flex gap-2">
+    <div class="grid grid-cols-2 flex-1 gap-4">
+      <div :class="frostGlassStyle" class="!flex flex-wrap content-start gap-2">
         <div
+          v-for="block in leftBLock"
+          :key="block.id"
           :class="{
             [frostGlassStyle]: true,
             [listItemStyle]: true,
           }"
         >
-          a
-        </div>
-        <div
-          :class="{
-            [frostGlassStyle]: true,
-            [listItemStyle]: true,
-          }"
-        >
-          a
-        </div>
-        <div
-          :class="{
-            [frostGlassStyle]: true,
-            [listItemStyle]: true,
-          }"
-        >
-          a
+          {{ block.name }}
         </div>
       </div>
-      <div :class="frostGlassStyle" class="flex-1 !flex gap-2">
+      <div :class="frostGlassStyle" class="!flex flex-wrap gap-2 content-start">
         <div
+          v-for="block in rightBlock"
+          :key="block.id"
           :class="{
             [frostGlassStyle]: true,
             [listItemStyle]: true,
           }"
         >
-          a
-        </div>
-        <div
-          :class="{
-            [frostGlassStyle]: true,
-            [listItemStyle]: true,
-          }"
-        >
-          a
-        </div>
-        <div
-          :class="{
-            [frostGlassStyle]: true,
-            [listItemStyle]: true,
-          }"
-        >
-          a
+          {{ block.name }}
         </div>
       </div>
     </div>
