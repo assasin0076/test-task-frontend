@@ -1,19 +1,16 @@
 import { Ref, ref } from 'vue'
 import blocks from '@/dictionaries/blocks'
 
-// Интерфейс для элементов данных
 interface DataElement {
   id: number
   name: string
 }
 
-// Интерфейс для возвращаемых данных
 interface SeedBlocksResult {
   right: DataElement[]
   left: DataElement[]
 }
 
-// Интерфейс для возвращаемого объекта из useFakeData
 interface UseFakeDataReturn {
   isLoading: Ref<boolean>
   getFakeData: () => Promise<SeedBlocksResult>
@@ -40,4 +37,4 @@ const useFakeData = (): UseFakeDataReturn => {
   }
 }
 
-export default useFakeData
+export { useFakeData, DataElement }

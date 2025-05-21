@@ -1,12 +1,22 @@
 <script setup lang="ts">
 import useMainCombiner from './composables/classesCombiners/mainCombiner'
-import useFakeData from '@/composables/fakeData'
-import { onMounted, ref } from 'vue'
+import { DataElement, useFakeData } from '@/composables/fakeData'
+import { onMounted, Ref, ref } from 'vue'
 
 const { frostGlassStyle, listItemStyle } = useMainCombiner()
 
-const leftBLock = ref([])
-const rightBlock = ref([])
+const leftBLock: Ref<DataElement[]> = ref([])
+const selectedLeft: Ref<DataElement[]> = ref([])
+
+const rightBlock: Ref<DataElement[]> = ref([])
+const selectedRight: Ref<DataElement | undefined> = ref()
+const selectRight = (item: DataElement) => {
+  selectedRight.value = item
+}
+const unselectRight = () => {
+  selectedRight.value = undefined
+}
+
 const { isLoading, getFakeData } = useFakeData()
 
 onMounted(async () => {
@@ -34,7 +44,20 @@ onMounted(async () => {
         </div>
         <div class="self-center">selected: n/m</div>
       </div>
-      <div :class="frostGlassStyle" class="w-[600px] items-center justify-center flex">111</div>
+      <div :class="frostGlassStyle" class="w-[600px] items-center justify-center flex h-[180px]">
+        <div
+          v-if="selectedRight"
+          :class="{
+            [frostGlassStyle]: true,
+            [listItemStyle]: true,
+          }"
+          class="hover:bg-red-100"
+          @click="unselectRight"
+        >
+          {{ selectedRight?.name }}
+        </div>
+        <div v-else>None slected</div>
+      </div>
     </div>
     <div class="grid grid-cols-2 flex-1 gap-4">
       <div :class="frostGlassStyle" class="!flex flex-wrap content-start gap-2">
@@ -45,6 +68,7 @@ onMounted(async () => {
             [frostGlassStyle]: true,
             [listItemStyle]: true,
           }"
+          class="hover:bg-blue-100"
         >
           {{ block.name }}
         </div>
@@ -57,6 +81,8 @@ onMounted(async () => {
             [frostGlassStyle]: true,
             [listItemStyle]: true,
           }"
+          class="hover:bg-blue-100"
+          @click="selectRight(block)"
         >
           {{ block.name }}
         </div>

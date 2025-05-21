@@ -9,7 +9,7 @@ const useMainCombiner = (): MainCombiner => {
     'p-8 bg-white/20 backdrop-blur-lg border border-gray-300 rounded-lg shadow-lg inline-block nowrap flex-wrap',
   )
 
-  const itemPart: Ref<string> = ref('w-[140px] max-w-[140px] min-h-[100px] box-border')
+  const itemPart: Ref<string> = ref('w-[140px] max-w-[140px] cursor-pointer')
 
   const listItemStyle: ComputedRef<string> = computed(() => {
     return frostGlassStyle.value + ' ' + itemPart.value
