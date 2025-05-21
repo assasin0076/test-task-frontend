@@ -1,12 +1,26 @@
 <script setup lang="ts">
 import useMainCombiner from './composables/classesCombiners/mainCombiner'
 import { DataElement, useFakeData } from '@/composables/fakeData'
-import { onMounted, Ref, ref } from 'vue'
+import { computed, onMounted, Ref, ref } from 'vue'
 
 const { frostGlassStyle, listItemStyle } = useMainCombiner()
 
 const leftBLock: Ref<DataElement[]> = ref([])
 const selectedLeft: Ref<DataElement[]> = ref([])
+
+const maxSize = 6
+const isMaxSize = computed(() => selectedLeft.value.length >= maxSize)
+const isLeftAlreadyIn = (id) => {
+  return selectedLeft.value.some((el) => el.id === id)
+}
+const selectLeft = (item: DataElement) => {
+  if (isMaxSize.value) return
+  if (isLeftAlreadyIn(item.id)) return
+  selectedLeft.value = [...selectedLeft.value, item]
+}
+const removeLeft = (item: DataElement) => {
+  selectedLeft.value = selectedLeft.value.filter((el) => el.id !== item.id)
+}
 
 const rightBlock: Ref<DataElement[]> = ref([])
 const selectedRight: Ref<DataElement | undefined> = ref()
@@ -28,21 +42,27 @@ onMounted(async () => {
 
 <template>
   <div class="min-h-screen animated-gradient p-4 flex flex-col">
-    <div class="flex justify-between mb-6">
-      <div :class="frostGlassStyle" class="flex flex-col w-[600px]">
-        <div class="mb-4 flex gap-2">
-          <div
-            v-for="block in leftBlockData"
-            :key="block.id"
-            :class="{
-              [frostGlassStyle]: true,
-              [listItemStyle]: true,
-            }"
-          >
-            {{ block.name }}
+    <div class="flex mb-6 justify-between">
+      <div :class="frostGlassStyle" class="flex flex-col w-[900px]">
+        <div class="flex">
+          <div class="flex gap-2">
+            <div
+              v-for="block in selectedLeft"
+              :key="block.id"
+              :class="{
+                [frostGlassStyle]: true,
+                [listItemStyle]: true,
+              }"
+              class="hover:bg-red-100 !w-[120px] h-[90px] text-[12px]"
+              @click="removeLeft(block)"
+            >
+              {{ block.name }}
+            </div>
           </div>
         </div>
-        <div class="self-center">selected: n/m</div>
+        <div class="mx-auto mt-auto w-[100px]">
+          selected: {{ !!selectedLeft.length ? selectedLeft.length : 'n/m' }}
+        </div>
       </div>
       <div :class="frostGlassStyle" class="w-[600px] items-center justify-center flex h-[180px]">
         <div
@@ -67,8 +87,10 @@ onMounted(async () => {
           :class="{
             [frostGlassStyle]: true,
             [listItemStyle]: true,
+            ['hover:bg-blue-100']: !isMaxSize && !isLeftAlreadyIn(block.id),
+            ['!cursor-default']: isMaxSize || isLeftAlreadyIn(block.id),
           }"
-          class="hover:bg-blue-100"
+          @click="selectLeft(block)"
         >
           {{ block.name }}
         </div>
