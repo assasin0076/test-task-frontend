@@ -44,9 +44,12 @@ const unselectRight = () => {
 
 const { isLoading, getFakeData } = useFakeData()
 
-const reset = () => {
+const resetSelection = () => {
   selectedLeft.value = []
   selectedRight.value = undefined
+}
+const reset = () => {
+  resetSelection()
   leftBLock.value = []
   rightBlock.value = []
 }
@@ -102,14 +105,21 @@ onMounted(() => {
         </div>
         <div
           :class="frostGlassStyle"
-          class="w-[w-200px] items-center justify-center flex h-[180px] items-start"
+          class="w-[w-200px] items-center justify-center flex flex-col gap-2 h-[180px] items-start"
         >
+          <div
+            :class="frostGlassStyle"
+            class="!p-0 !rounded-full flex items-center justify-center h-10 w-10 border border-gray-300 hover:bg-gray-50 cursor-pointer transition"
+            @click="resetSelection"
+          >
+            R
+          </div>
           <div
             :class="frostGlassStyle"
             class="!p-0 !rounded-full flex items-center justify-center h-10 w-10 border border-gray-300 hover:bg-gray-50 cursor-pointer transition"
             @click="fetchFakeData"
           >
-            R
+            F
           </div>
         </div>
       </div>
