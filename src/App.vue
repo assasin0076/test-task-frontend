@@ -40,10 +40,20 @@ const unselectRight = () => {
 
 const { isLoading, getFakeData } = useFakeData()
 
-onMounted(async () => {
+const reset = () => {
+  selectedLeft.value = []
+  selectedRight.value = undefined
+  leftBLock.value = []
+  rightBlock.value = []
+}
+const fetchFakeData = async () => {
+  reset()
   const response = await getFakeData()
   leftBLock.value = response.left
   rightBlock.value = response.right
+}
+onMounted(() => {
+  fetchFakeData()
 })
 </script>
 
@@ -71,19 +81,33 @@ onMounted(async () => {
           selected: {{ !!selectedLeft.length ? selectedLeft.length : 'n/m' }}
         </div>
       </div>
-      <div :class="frostGlassStyle" class="w-[600px] items-center justify-center flex h-[180px]">
-        <div
-          v-if="selectedRight"
-          :class="{
-            [frostGlassStyle]: true,
-            [listItemStyle]: true,
-          }"
-          class="hover:bg-red-100"
-          @click="unselectRight"
-        >
-          {{ getRightById(selectedRight).name }}
+      <div class="flex gap-4">
+        <div :class="frostGlassStyle" class="w-[600px] items-center justify-center flex h-[180px]">
+          <div
+            v-if="selectedRight"
+            :class="{
+              [frostGlassStyle]: true,
+              [listItemStyle]: true,
+            }"
+            class="hover:bg-red-100"
+            @click="unselectRight"
+          >
+            {{ getRightById(selectedRight).name }}
+          </div>
+          <div v-else>None selected</div>
         </div>
-        <div v-else>None selected</div>
+        <div
+          :class="frostGlassStyle"
+          class="w-[w-200px] items-center justify-center flex h-[180px] items-start"
+        >
+          <div
+            :class="frostGlassStyle"
+            class="!p-0 !rounded-full flex items-center justify-center h-10 w-10 border border-gray-300 hover:bg-gray-50 cursor-pointer transition"
+            @click="fetchFakeData"
+          >
+            R
+          </div>
+        </div>
       </div>
     </div>
     <div class="grid grid-cols-2 flex-1 gap-4">

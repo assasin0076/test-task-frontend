@@ -27,7 +27,7 @@ const useFakeData = (): UseFakeDataReturn => {
         const leftData = JSON.parse(JSON.stringify(blocks.left))
         isLoading.value = false
         resolve({ right: rightData, left: leftData })
-      }, 500)
+      }, 2000)
     })
   }
 
