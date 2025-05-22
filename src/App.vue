@@ -7,7 +7,7 @@ import { computed, onMounted, Ref, ref } from 'vue'
 const { frostGlassStyle, listItemStyle } = useMainCombiner()
 
 const leftBLock: Ref<DataElement[]> = ref([])
-const selectedLeft: Ref<DataElement.id[]> = ref([])
+const selectedLeft: Ref<DataElement['id'][]> = ref([])
 const getLeftById = (id) => {
   return leftBLock.value.find((el) => el.id === id)
 }
@@ -22,12 +22,12 @@ const selectLeft = (item: DataElement) => {
   if (isLeftAlreadyIn(item.id)) return
   selectedLeft.value = [...selectedLeft.value, item.id]
 }
-const removeLeft = (id: DataElement.id) => {
+const removeLeft = (id: DataElement['id']) => {
   selectedLeft.value = selectedLeft.value.filter((el) => el !== id)
 }
 
 const rightBlock: Ref<DataElement[]> = ref([])
-const selectedRight: Ref<DataElement.id | undefined> = ref()
+const selectedRight: Ref<DataElement['id'] | undefined> = ref()
 const isRightSelected = (id) => {
   return selectedRight.value === id
 }
