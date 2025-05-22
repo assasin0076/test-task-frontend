@@ -105,7 +105,7 @@ onMounted(() => {
         </div>
         <div
           :class="frostGlassStyle"
-          class="w-[w-200px] items-center justify-center flex flex-col gap-2 h-[180px] items-start"
+          class="w-[w-200px] items-center justify-center flex flex-col gap-2 h-[180px] items-center"
         >
           <div
             :class="frostGlassStyle"
