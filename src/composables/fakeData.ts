@@ -1,5 +1,5 @@
 import { Ref, ref } from 'vue'
-import blocks from '@/dictionaries/blocks'
+import blocks from '../dictionaries/blocks'
 
 interface DataElement {
   id: number
@@ -37,4 +37,6 @@ const useFakeData = (): UseFakeDataReturn => {
   }
 }
 
-export { useFakeData, DataElement }
+export type { DataElement }
+
+export { useFakeData }
