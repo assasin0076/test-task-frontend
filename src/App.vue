@@ -6,26 +6,33 @@ import { computed, onMounted, Ref, ref } from 'vue'
 const { frostGlassStyle, listItemStyle } = useMainCombiner()
 
 const leftBLock: Ref<DataElement[]> = ref([])
-const selectedLeft: Ref<DataElement[]> = ref([])
+const selectedLeft: Ref<DataElement.id[]> = ref([])
+const getLeftById = (id) => {
+  return leftBLock.value.find((el) => el.id === id)
+}
 
 const maxSize = 6
 const isMaxSize = computed(() => selectedLeft.value.length >= maxSize)
 const isLeftAlreadyIn = (id) => {
-  return selectedLeft.value.some((el) => el.id === id)
+  return selectedLeft.value.some((el) => el === id)
 }
 const selectLeft = (item: DataElement) => {
   if (isMaxSize.value) return
   if (isLeftAlreadyIn(item.id)) return
-  selectedLeft.value = [...selectedLeft.value, item]
+  selectedLeft.value = [...selectedLeft.value, item.id]
 }
-const removeLeft = (item: DataElement) => {
-  selectedLeft.value = selectedLeft.value.filter((el) => el.id !== item.id)
+const removeLeft = (id: DataElement.id) => {
+  selectedLeft.value = selectedLeft.value.filter((el) => el !== id)
 }
 
 const rightBlock: Ref<DataElement[]> = ref([])
-const selectedRight: Ref<DataElement | undefined> = ref()
+const selectedRight: Ref<DataElement.id | undefined> = ref()
+
+const getRightById = (id) => {
+  return rightBlock.value.find((el) => el.id === id)
+}
 const selectRight = (item: DataElement) => {
-  selectedRight.value = item
+  selectedRight.value = item.id
 }
 const unselectRight = () => {
   selectedRight.value = undefined
@@ -47,16 +54,16 @@ onMounted(async () => {
         <div class="flex">
           <div class="flex gap-2">
             <div
-              v-for="block in selectedLeft"
-              :key="block.id"
+              v-for="id in selectedLeft"
+              :key="id"
               :class="{
                 [frostGlassStyle]: true,
                 [listItemStyle]: true,
               }"
               class="hover:bg-red-100 !w-[120px] h-[90px] text-[12px]"
-              @click="removeLeft(block)"
+              @click="removeLeft(id)"
             >
-              {{ block.name }}
+              {{ getLeftById(id).name }}
             </div>
           </div>
         </div>
@@ -74,9 +81,9 @@ onMounted(async () => {
           class="hover:bg-red-100"
           @click="unselectRight"
         >
-          {{ selectedRight?.name }}
+          {{ getRightById(selectedRight).name }}
         </div>
-        <div v-else>None slected</div>
+        <div v-else>None selected</div>
       </div>
     </div>
     <div class="grid grid-cols-2 flex-1 gap-4">
