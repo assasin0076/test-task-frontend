@@ -28,6 +28,9 @@ const removeLeft = (id: DataElement.id) => {
 
 const rightBlock: Ref<DataElement[]> = ref([])
 const selectedRight: Ref<DataElement.id | undefined> = ref()
+const isRightSelected = (id) => {
+  return selectedRight.value === id
+}
 
 const getRightById = (id) => {
   return rightBlock.value.find((el) => el.id === id)
@@ -121,6 +124,7 @@ onMounted(() => {
             [listItemStyle]: true,
             ['hover:bg-blue-100']: !isMaxSize && !isLeftAlreadyIn(block.id),
             ['!cursor-default']: isMaxSize || isLeftAlreadyIn(block.id),
+            ['!bg-gray-300/20']: isLeftAlreadyIn(block.id),
           }"
           @click="selectLeft(block)"
         >
@@ -134,6 +138,7 @@ onMounted(() => {
           :class="{
             [frostGlassStyle]: true,
             [listItemStyle]: true,
+            ['!bg-gray-300/20']: isRightSelected(block.id),
           }"
           class="hover:bg-blue-100"
           @click="selectRight(block)"
