@@ -13,18 +13,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Login to Docker Hub
-        uses: docker/login-action@v2
+      - name: Copy project files to server
+        uses: appleboy/scp-action@master
         with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-      - name: Build and push Docker image
-        uses: docker/build-push-action@v4
-        with:
-          context: .
-          push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/test-task-frontend-image:latest
+          host: ${{ secrets.SERVER_IP }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          source: "./*"
+          target: "/var/www/test-front-1.com/html"
 
       - name: Deploy to server
         uses: appleboy/ssh-action@master
@@ -33,9 +29,14 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/test-task-frontend-image:latest
+            cd /var/www/test-front-1.com/html
+            
+            docker build -t test-task-frontend-image .
             
             docker stop test-task-frontend-container || true
             docker rm test-task-frontend-container || true
             
-            docker run -d --name test-task-frontend-container -p 80:80 ${{ secrets.DOCKERHUB_USERNAME }}/test-task-frontend-image:latest
+            docker run -d \
+              --name test-task-frontend-container \
+              -p 80:80 \
+              test-task-frontend-image
