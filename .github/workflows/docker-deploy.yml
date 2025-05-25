@@ -43,7 +43,7 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             # Обновите конфигурацию Nginx
-            sudo tee /etc/nginx/sites-available/test-front-1 <<EOF
+            sudo tee /etc/nginx/sites-available/default <<EOF
             server {
                 listen 80;
                 server_name victor-test-list.ageneroj.beget.tech;
