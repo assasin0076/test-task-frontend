@@ -10,9 +10,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # 1. Checkout кода
       - name: Checkout code
         uses: actions/checkout@v3
 
+      # 2. Очистка целевой директории на сервере
       - name: Clean target directory on server
         uses: appleboy/ssh-action@master
         with:
@@ -22,6 +24,7 @@ jobs:
           script: |
             rm -rf /var/www/test-front-1.com/html/*
 
+      # 3. Копирование файлов проекта на сервер
       - name: Copy project files to server
         uses: appleboy/scp-action@master
         with:
@@ -31,6 +34,7 @@ jobs:
           source: "./*"
           target: "/var/www/test-front-1.com/html"
 
+      # 4. Настройка Nginx для работы с контейнером
       - name: Update Nginx configuration
         uses: appleboy/ssh-action@master
         with:
@@ -38,6 +42,7 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
+            # Обновите конфигурацию Nginx
             sudo tee /etc/nginx/sites-available/test-front-1 <<EOF
             server {
                 listen 80;
@@ -61,6 +66,7 @@ jobs:
             # Перезапустите Nginx
             sudo systemctl restart nginx
 
+      # 5. Запуск Docker-контейнера
       - name: Deploy to server
         uses: appleboy/ssh-action@master
         with:
