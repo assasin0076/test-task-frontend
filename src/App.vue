@@ -3,8 +3,10 @@ import type { DataElement } from './composables/fakeData'
 import useMainCombiner from './composables/classesCombiners/mainCombiner'
 import { useFakeData } from './composables/fakeData'
 import { computed, onMounted, Ref, ref } from 'vue'
+import LoadingStub from '@/components/LoadingStub.vue'
+import Block from '@/components/Block.vue'
 
-const { frostGlassStyle, listItemStyle } = useMainCombiner()
+const { frostGlassStyle } = useMainCombiner()
 
 const leftBLock: Ref<DataElement[]> = ref([])
 const selectedLeft: Ref<DataElement['id'][]> = ref([])
@@ -70,18 +72,13 @@ onMounted(() => {
       <div :class="frostGlassStyle" class="flex flex-col w-[900px]">
         <div class="flex">
           <div class="flex gap-2">
-            <div
+            <Block
               v-for="id in selectedLeft"
               :key="id"
-              :class="{
-                [frostGlassStyle]: true,
-                [listItemStyle]: true,
-              }"
-              class="hover:bg-red-100 !w-[120px] h-[90px] text-[12px]"
+              :block="getLeftById(id)"
+              :theme="{ size: 'sm', style: 'danger' }"
               @click="removeLeft(id)"
-            >
-              {{ getLeftById(id).name }}
-            </div>
+            />
           </div>
         </div>
         <div class="mx-auto mt-auto w-[100px]">
@@ -90,17 +87,12 @@ onMounted(() => {
       </div>
       <div class="flex gap-4">
         <div :class="frostGlassStyle" class="w-[600px] items-center justify-center flex h-[180px]">
-          <div
+          <Block
             v-if="selectedRight"
-            :class="{
-              [frostGlassStyle]: true,
-              [listItemStyle]: true,
-            }"
-            class="hover:bg-red-100"
+            :block="getRightById(selectedRight)"
             @click="unselectRight"
-          >
-            {{ getRightById(selectedRight).name }}
-          </div>
+            :theme="{ style: 'danger' }"
+          />
           <div v-else>None selected</div>
         </div>
         <div
@@ -126,44 +118,26 @@ onMounted(() => {
     </div>
     <div class="grid grid-cols-2 flex-1 gap-4">
       <div :class="frostGlassStyle" class="!flex flex-wrap content-start gap-2">
-        <div
+        <Block
           v-for="block in leftBLock"
           :key="block.id"
-          :class="{
-            [frostGlassStyle]: true,
-            [listItemStyle]: true,
-            ['hover:bg-blue-100']: !isMaxSize && !isLeftAlreadyIn(block.id),
-            ['!cursor-default']: isMaxSize || isLeftAlreadyIn(block.id),
-            ['!bg-gray-300/20']: isLeftAlreadyIn(block.id),
-          }"
+          :block="block"
+          :disabled="isMaxSize || isLeftAlreadyIn(block.id)"
           @click="selectLeft(block)"
-        >
-          {{ block.name }}
-        </div>
+        />
       </div>
       <div :class="frostGlassStyle" class="!flex flex-wrap gap-2 content-start">
-        <div
+        <Block
           v-for="block in rightBlock"
           :key="block.id"
-          :class="{
-            [frostGlassStyle]: true,
-            [listItemStyle]: true,
-            ['!bg-gray-300/20']: isRightSelected(block.id),
-          }"
-          class="hover:bg-blue-100"
+          :block="block"
+          :selected="isRightSelected(block.id)"
           @click="selectRight(block)"
-        >
-          {{ block.name }}
-        </div>
+        />
       </div>
     </div>
   </div>
-  <div
-    v-if="isLoading"
-    class="h-screen w-screen fixed top-0 right-0 bg-gray-500/5 backdrop-blur-xs flex items-center justify-center"
-  >
-    <div class="font-bold text-6xl rainbow-text">wait...</div>
-  </div>
+  <loading-stub v-if="isLoading" />
 </template>
 
 <style scoped>
