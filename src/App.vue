@@ -1,60 +1,31 @@
 <script setup lang="ts">
-import type { DataElement } from './composables/fakeData'
 import useMainCombiner from './composables/classesCombiners/mainCombiner'
 import { useFakeData } from './composables/fakeData'
-import { computed, onMounted, Ref, ref } from 'vue'
-import LoadingStub from '@/components/LoadingStub.vue'
-import Block from '@/components/Block.vue'
+import { onMounted } from 'vue'
+import LoadingStub from './components/LoadingStub.vue'
+import Block from './components/Block.vue'
+import { useBlockControllLogic } from './composables/blockControllLogic'
 
 const { frostGlassStyle } = useMainCombiner()
 
-const leftBLock: Ref<DataElement[]> = ref([])
-const selectedLeft: Ref<DataElement['id'][]> = ref([])
-const getLeftById = (id) => {
-  return leftBLock.value.find((el) => el.id === id)
-}
-
-const maxSize = 6
-const isMaxSize = computed(() => selectedLeft.value.length >= maxSize)
-const isLeftAlreadyIn = (id) => {
-  return selectedLeft.value.some((el) => el === id)
-}
-const selectLeft = (item: DataElement) => {
-  if (isMaxSize.value) return
-  if (isLeftAlreadyIn(item.id)) return
-  selectedLeft.value = [...selectedLeft.value, item.id]
-}
-const removeLeft = (id: DataElement['id']) => {
-  selectedLeft.value = selectedLeft.value.filter((el) => el !== id)
-}
-
-const rightBlock: Ref<DataElement[]> = ref([])
-const selectedRight: Ref<DataElement['id'] | undefined> = ref()
-const isRightSelected = (id) => {
-  return selectedRight.value === id
-}
-
-const getRightById = (id) => {
-  return rightBlock.value.find((el) => el.id === id)
-}
-const selectRight = (item: DataElement) => {
-  selectedRight.value = item.id
-}
-const unselectRight = () => {
-  selectedRight.value = undefined
-}
-
 const { isLoading, getFakeData } = useFakeData()
-
-const resetSelection = () => {
-  selectedLeft.value = []
-  selectedRight.value = undefined
-}
-const reset = () => {
-  resetSelection()
-  leftBLock.value = []
-  rightBlock.value = []
-}
+const {
+  isLeftMaxSize,
+  leftBLock,
+  selectedLeft,
+  getLeftById,
+  isLeftAlreadyIn,
+  selectLeft,
+  removeLeft,
+  rightBlock,
+  selectedRight,
+  isRightSelected,
+  getRightById,
+  selectRight,
+  unselectRight,
+  resetSelection,
+  reset,
+} = useBlockControllLogic()
 const fetchFakeData = async () => {
   reset()
   const response = await getFakeData()
@@ -122,7 +93,7 @@ onMounted(() => {
           v-for="block in leftBLock"
           :key="block.id"
           :block="block"
-          :disabled="isMaxSize || isLeftAlreadyIn(block.id)"
+          :disabled="isLeftMaxSize || isLeftAlreadyIn(block.id)"
           @click="selectLeft(block)"
         />
       </div>
@@ -145,30 +116,5 @@ onMounted(() => {
   background: linear-gradient(270deg, #f0f8ff, #c4eaff, #e0f7fa);
   background-size: 300% 300%;
   animation: gradient-animation 10s infinite;
-}
-
-@keyframes rainbow-text-gradient {
-  0% {
-    background-position: 0% 50%;
-  }
-  100% {
-    background-position: 100% 50%;
-  }
-}
-
-.rainbow-text {
-  background: linear-gradient(
-    270deg,
-    rgba(255, 0, 0, 0.8),
-    rgba(255, 165, 0, 0.8),
-    rgba(0, 0, 255, 0.8),
-    rgba(75, 0, 130, 0.8),
-    rgba(238, 130, 238, 0.8)
-  );
-  background-size: 800% 100%;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  animation: rainbow-text-gradient 8s ease-in-out infinite;
-  text-shadow: 2px 0px 20px rgba(0, 0, 0, 0.2);
 }
 </style>

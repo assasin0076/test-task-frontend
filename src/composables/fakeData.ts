@@ -38,5 +38,6 @@ const useFakeData = (): UseFakeDataReturn => {
 }
 
 export type { DataElement }
+export type { SeedBlocksResult }
 
 export { useFakeData }

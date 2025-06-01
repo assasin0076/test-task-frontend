@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import useMainCombiner from '@/composables/classesCombiners/mainCombiner'
-import { DataElement } from '@/composables/fakeData'
+import useMainCombiner from '../composables/classesCombiners/mainCombiner'
+import { DataElement } from '../composables/fakeData'
 import { computed } from 'vue'
 
 const { frostGlassStyle, listItemStyle } = useMainCombiner()
