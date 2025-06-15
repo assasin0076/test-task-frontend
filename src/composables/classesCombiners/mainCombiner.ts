@@ -10,7 +10,7 @@ const useMainCombiner = (): MainCombiner => {
   )
 
   const itemPart: Ref<string> = ref(
-    'w-[140px] max-w-[140px] cursor-pointer !flex !items-center !justify-center',
+    'w-[140px] max-w-[140px] md:w-[100px] md:max-w-[100px] text-ellipsis text-nowrap md:text-[8px] cursor-pointer !flex !items-center !justify-center',
   )
 
   const listItemStyle: ComputedRef<string> = computed(() => {

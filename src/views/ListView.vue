@@ -39,8 +39,8 @@ onMounted(() => {
 
 <template>
   <div class="min-h-screen animated-gradient p-4 flex flex-col">
-    <div class="flex mb-6 justify-between">
-      <div :class="frostGlassStyle" class="flex flex-col w-[900px]">
+    <div class="grid grid-cols-[49.5%_auto_100px] gap-4 mb-6">
+      <div :class="frostGlassStyle" class="flex flex-col">
         <div class="flex">
           <div class="flex gap-2">
             <Block
@@ -56,34 +56,32 @@ onMounted(() => {
           selected: {{ !!selectedLeft.length ? selectedLeft.length : 'n/m' }}
         </div>
       </div>
-      <div class="flex gap-4">
-        <div :class="frostGlassStyle" class="w-[600px] items-center justify-center flex h-[180px]">
-          <Block
-              v-if="selectedRight"
-              :block="getRightById(selectedRight)"
-              @click="unselectRight"
-              :theme="{ style: 'danger' }"
-          />
-          <div v-else>None selected</div>
+      <div :class="frostGlassStyle" class="items-center justify-center flex h-[180px]">
+        <Block
+            v-if="selectedRight"
+            :block="getRightById(selectedRight)"
+            @click="unselectRight"
+            :theme="{ style: 'danger' }"
+        />
+        <div v-else>None selected</div>
+      </div>
+      <div
+          :class="frostGlassStyle"
+          class=" items-center justify-center flex flex-col gap-2 h-[180px] items-center"
+      >
+        <div
+            :class="frostGlassStyle"
+            class="!p-0 !rounded-full flex items-center justify-center h-10 w-10 border border-gray-300 hover:bg-gray-50 cursor-pointer transition"
+            @click="resetSelection"
+        >
+          R
         </div>
         <div
             :class="frostGlassStyle"
-            class="w-[w-200px] items-center justify-center flex flex-col gap-2 h-[180px] items-center"
+            class="!p-0 !rounded-full flex items-center justify-center h-10 w-10 border border-gray-300 hover:bg-gray-50 cursor-pointer transition"
+            @click="fetchFakeData"
         >
-          <div
-              :class="frostGlassStyle"
-              class="!p-0 !rounded-full flex items-center justify-center h-10 w-10 border border-gray-300 hover:bg-gray-50 cursor-pointer transition"
-              @click="resetSelection"
-          >
-            R
-          </div>
-          <div
-              :class="frostGlassStyle"
-              class="!p-0 !rounded-full flex items-center justify-center h-10 w-10 border border-gray-300 hover:bg-gray-50 cursor-pointer transition"
-              @click="fetchFakeData"
-          >
-            F
-          </div>
+          F
         </div>
       </div>
     </div>

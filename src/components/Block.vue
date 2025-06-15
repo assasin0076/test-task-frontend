@@ -35,7 +35,7 @@ const hoverStyles = computed(() => {
       [hoverStyles]: true,
       ['!bg-gray-300/20']: selected | disabled,
       ['!cursor-default']: disabled,
-      ['!w-[120px] h-[90px] text-[12px]']: defineSize === 'sm',
+      ['!w-[120px] h-[90px] md:!w-[100px] text-[12px]']: defineSize === 'sm',
     }"
     class="hover:bg-blue-100"
   >
