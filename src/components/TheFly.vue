@@ -18,10 +18,10 @@ const fly = ref<HTMLElement | null>(null)
 const getRawHtmlValue = (val) => {
   return parseInt(val) || 0
 }
-const isFlyLeftTouch = () => getRawHtmlValue(fly.value.style.left) - 20 >= 20
-const isFlyRightTouch = () => getRawHtmlValue(fly.value.style.left) + 20 <= width.value
-const isFlyTopTouch = () => getRawHtmlValue(fly.value.style.top) - 20 >= 20
-const isFlyBottomTouch = () => getRawHtmlValue(fly.value.style.top) + 20 <= height.value
+const isFlyLeftTouch = () => getRawHtmlValue(fly.value.style.left) - 20 >= 40
+const isFlyRightTouch = () => getRawHtmlValue(fly.value.style.left) + 40 <= width.value
+const isFlyTopTouch = () => getRawHtmlValue(fly.value.style.top) - 20 >= 40
+const isFlyBottomTouch = () => getRawHtmlValue(fly.value.style.top) + 40 <= height.value
 const moveFlyLeft = () => {
   if (isFlyLeftTouch()) fly.value.style.left = `${getRawHtmlValue(fly.value.style.left) - 1 || 1}px`
   else direction.value = 'right'
